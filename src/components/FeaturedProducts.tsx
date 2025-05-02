@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import {
   ShoppingCart, 
   Eye, 
   Heart, 
-  Package // Replacing Cube with Package, which is available in lucide-react
+  Package
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProductViewer from "./ProductViewer";
@@ -51,14 +50,6 @@ const products = [
     category: "Brinquedos",
     price: 69.90,
     image: "https://images.unsplash.com/photo-1452378174528-3090a4bba7b2",
-    modelType: "cube"
-  },
-  {
-    id: 6,
-    name: "Interface de Aplicativo Mobile",
-    category: "Telas de App",
-    price: 149.90,
-    image: "/placeholder.svg",
     modelType: "cube"
   }
 ];

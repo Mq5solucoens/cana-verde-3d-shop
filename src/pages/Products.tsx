@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,14 +55,6 @@ const products = [
     modelType: "cube"
   },
   {
-    id: 6,
-    name: "Interface de Aplicativo Mobile",
-    category: "Telas de App",
-    price: 149.90,
-    image: "/placeholder.svg",
-    modelType: "cube"
-  },
-  {
     id: 7,
     name: "Vaso Estilo Rústico",
     category: "Decoração",
@@ -102,14 +93,6 @@ const products = [
     price: 89.90,
     image: "https://images.unsplash.com/photo-1452378174528-3090a4bba7b2",
     modelType: "cube"
-  },
-  {
-    id: 12,
-    name: "Protótipo de App",
-    category: "Telas de App",
-    price: 129.90,
-    image: "/placeholder.svg",
-    modelType: "cube"
   }
 ];
 
@@ -120,8 +103,7 @@ const categories = [
   "Peças Mecânicas",
   "Itens Táticos",
   "Festas",
-  "Brinquedos",
-  "Telas de App"
+  "Brinquedos"
 ];
 
 const Products = () => {

@@ -4,8 +4,7 @@ import {
   Wrench, 
   Package, 
   PartyPopper, 
-  ToyBrick, 
-  LayoutDashboard 
+  ToyBrick
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -34,11 +33,6 @@ const categories = [
     name: "Brinquedos",
     icon: ToyBrick,
     href: "/categorias/brinquedos"
-  },
-  {
-    name: "Telas de App",
-    icon: LayoutDashboard,
-    href: "/categorias/telas-app"
   }
 ];
 
@@ -50,7 +44,7 @@ const CategoryIcons = () => {
           Navegue por <span className="gradient-text">Categoria</span>
         </h2>
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
           {categories.map((category) => (
             <Link 
               key={category.name} 
