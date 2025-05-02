@@ -18,7 +18,7 @@ const products = [
     name: "Vaso Decorativo Moderno",
     category: "Decoração",
     price: 79.90,
-    image: "/placeholder.svg",
+    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9",
     modelType: "cube"
   },
   {
@@ -26,7 +26,7 @@ const products = [
     name: "Engrenagem Mecânica",
     category: "Peças Mecânicas",
     price: 129.90,
-    image: "/placeholder.svg",
+    image: "https://images.unsplash.com/photo-1493962853295-0fd70327578a",
     modelType: "cube"
   },
   {
@@ -34,7 +34,7 @@ const products = [
     name: "Colete Tático Modelado",
     category: "Itens Táticos",
     price: 249.90,
-    image: "/placeholder.svg",
+    image: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1",
     modelType: "cube"
   },
   {
@@ -42,7 +42,7 @@ const products = [
     name: "Kit de Decoração para Festa",
     category: "Festas",
     price: 99.90,
-    image: "/placeholder.svg",
+    image: "https://images.unsplash.com/photo-1498936178812-4b2e558d2937",
     modelType: "cube"
   },
   {
@@ -50,7 +50,7 @@ const products = [
     name: "Boneco Articulado",
     category: "Brinquedos",
     price: 69.90,
-    image: "/placeholder.svg",
+    image: "https://images.unsplash.com/photo-1452378174528-3090a4bba7b2",
     modelType: "cube"
   },
   {
@@ -93,6 +93,11 @@ const FeaturedProducts = () => {
                       src={product.image}
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = "/placeholder.svg";
+                      }}
                     />
                   )}
                   <div className="absolute top-3 right-3 flex flex-col gap-2">
