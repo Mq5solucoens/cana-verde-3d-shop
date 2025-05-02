@@ -6,7 +6,7 @@ import {
   ShoppingCart, 
   Eye, 
   Heart, 
-  Cube
+  Package // Replacing Cube with Package, which is available in lucide-react
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProductViewer from "./ProductViewer";
@@ -102,7 +102,7 @@ const FeaturedProducts = () => {
                       className="rounded-full bg-background/70 backdrop-blur-sm hover:bg-cana-verde hover:text-white"
                       onClick={() => toggleProductView(product.id)}
                     >
-                      {selectedProduct === product.id ? <Eye size={18} /> : <Cube size={18} />}
+                      {selectedProduct === product.id ? <Eye size={18} /> : <Package size={18} />}
                     </Button>
                     <Button 
                       variant="secondary" 
