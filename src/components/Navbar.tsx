@@ -1,17 +1,65 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { 
   Menu,
   X,
   Search,
   ShoppingCart,
-  ShoppingBag
+  ShoppingBag,
+  LogOut,
+  User
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const auth = localStorage.getItem("isAuthenticated");
+      const email = localStorage.getItem("userEmail");
+      
+      setIsLoggedIn(auth === "true");
+      setUserEmail(email || "");
+    };
+    
+    checkAuth();
+    // Check auth status when component mounts and when localStorage changes
+    window.addEventListener("storage", checkAuth);
+    
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    setIsLoggedIn(false);
+    toast({
+      title: "Sessão encerrada",
+      description: "Você saiu da sua conta com sucesso."
+    });
+    navigate("/");
+  };
+
+  // Extract username/email for display
+  const displayName = () => {
+    const name = localStorage.getItem("userName");
+    if (name) return name;
+    if (userEmail) {
+      const parts = userEmail.split('@');
+      return parts[0];
+    }
+    return "Usuário";
+  };
 
   return (
     <nav className="bg-secondary/80 backdrop-blur-md sticky top-0 z-50">
@@ -51,9 +99,24 @@ const Navbar = () => {
                 0
               </span>
             </Button>
-            <Button className="bg-cana-verde hover:bg-cana-verde-600 text-white">
-              Entrar
-            </Button>
+            
+            {isLoggedIn ? (
+              <div className="flex items-center space-x-2">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <User size={16} />
+                  <span className="max-w-[100px] truncate">{displayName()}</span>
+                </Button>
+                <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair">
+                  <LogOut size={20} />
+                </Button>
+              </div>
+            ) : (
+              <Link to="/login">
+                <Button className="bg-cana-verde hover:bg-cana-verde-600 text-white">
+                  Entrar
+                </Button>
+              </Link>
+            )}
           </div>
           
           {/* Mobile Menu Button */}
@@ -94,9 +157,24 @@ const Navbar = () => {
                     0
                   </span>
                 </Button>
-                <Button className="bg-cana-verde hover:bg-cana-verde-600 text-white">
-                  Entrar
-                </Button>
+                
+                {isLoggedIn ? (
+                  <div className="flex items-center space-x-2">
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <User size={16} />
+                      <span className="max-w-[80px] truncate">{displayName()}</span>
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair">
+                      <LogOut size={18} />
+                    </Button>
+                  </div>
+                ) : (
+                  <Link to="/login">
+                    <Button className="bg-cana-verde hover:bg-cana-verde-600 text-white">
+                      Entrar
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

@@ -10,6 +10,9 @@ import Purchases from "./pages/Purchases";
 import NotFound from "./pages/NotFound";
 import Categories from "./pages/Categories";
 import CategoriesIndex from "./pages/CategoriesIndex";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import AuthGuard from "./components/AuthGuard";
 
 const queryClient = new QueryClient();
 
@@ -22,9 +25,11 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/produtos" element={<Products />} />
-          <Route path="/compras" element={<Purchases />} />
+          <Route path="/compras" element={<AuthGuard><Purchases /></AuthGuard>} />
           <Route path="/categorias" element={<CategoriesIndex />} />
           <Route path="/categorias/:slug" element={<Categories />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registrar" element={<Register />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
