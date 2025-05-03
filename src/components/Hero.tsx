@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
-import Cube3D from "./Cube3D";
+import MQ5Text3D from "./MQ5Text3D";
 
 const Hero = () => {
   return (
@@ -30,10 +30,10 @@ const Hero = () => {
             </div>
           </div>
           
-          {/* 3D Model Showcase */}
+          {/* 3D Text Showcase */}
           <div className="lg:w-1/2 flex justify-center">
             <div className="w-64 h-64 md:w-80 md:h-80 relative animate-float">
-              <Cube3D />
+              <MQ5Text3D />
             </div>
           </div>
         </div>
