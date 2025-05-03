@@ -5,7 +5,8 @@ import {
   Menu,
   X,
   Search,
-  ShoppingCart
+  ShoppingCart,
+  ShoppingBag
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -29,6 +30,7 @@ const Navbar = () => {
             <Link to="/" className="text-foreground hover:text-cana-verde transition-colors">Início</Link>
             <Link to="/produtos" className="text-foreground hover:text-cana-verde transition-colors">Produtos</Link>
             <Link to="/categorias" className="text-foreground hover:text-cana-verde transition-colors">Categorias</Link>
+            <Link to="/compras" className="text-foreground hover:text-cana-verde transition-colors">Compras</Link>
             <Link to="/sobre" className="text-foreground hover:text-cana-verde transition-colors">Sobre</Link>
             <Link to="/contato" className="text-foreground hover:text-cana-verde transition-colors">Contato</Link>
           </div>
@@ -38,6 +40,11 @@ const Navbar = () => {
             <Button variant="ghost" size="icon">
               <Search size={20} />
             </Button>
+            <Link to="/compras">
+              <Button variant="ghost" size="icon">
+                <ShoppingBag size={20} />
+              </Button>
+            </Link>
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart size={20} />
               <span className="absolute -top-1 -right-1 bg-cana-verde text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -69,12 +76,18 @@ const Navbar = () => {
               <Link to="/" className="text-foreground py-2 hover:text-cana-verde">Início</Link>
               <Link to="/produtos" className="text-foreground py-2 hover:text-cana-verde">Produtos</Link>
               <Link to="/categorias" className="text-foreground py-2 hover:text-cana-verde">Categorias</Link>
+              <Link to="/compras" className="text-foreground py-2 hover:text-cana-verde">Compras</Link>
               <Link to="/sobre" className="text-foreground py-2 hover:text-cana-verde">Sobre</Link>
               <Link to="/contato" className="text-foreground py-2 hover:text-cana-verde">Contato</Link>
               <div className="flex space-x-3 pt-2">
                 <Button variant="ghost" size="icon">
                   <Search size={20} />
                 </Button>
+                <Link to="/compras">
+                  <Button variant="ghost" size="icon">
+                    <ShoppingBag size={20} />
+                  </Button>
+                </Link>
                 <Button variant="ghost" size="icon" className="relative">
                   <ShoppingCart size={20} />
                   <span className="absolute -top-1 -right-1 bg-cana-verde text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
