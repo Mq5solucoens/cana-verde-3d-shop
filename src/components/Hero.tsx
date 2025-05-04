@@ -1,7 +1,6 @@
 
-import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
-import MQ5Text3D from "./MQ5Text3D";
+import Cube3D from "./Cube3D";
 
 const Hero = () => {
   return (
@@ -20,20 +19,12 @@ const Hero = () => {
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
               Encontre modelos 3D de alta qualidade para decoração, peças mecânicas, festas, brinquedos e muito mais. Pronto para uso em seus aplicativos e projetos.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-              <Button className="btn-cana text-base px-6 py-6">
-                Explorar agora
-              </Button>
-              <Button variant="outline" className="text-base px-6 py-6">
-                Como funciona
-              </Button>
-            </div>
           </div>
           
-          {/* 3D Text Showcase */}
+          {/* 3D Cube Showcase */}
           <div className="lg:w-1/2 flex justify-center">
             <div className="w-64 h-64 md:w-80 md:h-80 relative animate-float">
-              <MQ5Text3D />
+              <Cube3D />
             </div>
           </div>
         </div>
