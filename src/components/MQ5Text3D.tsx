@@ -1,6 +1,8 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 
 const MQ5Text3D = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -19,11 +21,11 @@ const MQ5Text3D = () => {
     mountRef.current.appendChild(renderer.domElement);
     
     // Load font
-    const fontLoader = new THREE.FontLoader();
+    const fontLoader = new FontLoader();
     
     fontLoader.load('https://threejs.org/examples/fonts/helvetiker_bold.typeface.json', (font) => {
       // Create text geometry
-      const textGeometry = new THREE.TextGeometry('MQ5', {
+      const textGeometry = new TextGeometry('MQ5', {
         font: font,
         size: 3,
         height: 0.8,
