@@ -98,6 +98,8 @@ const categoryMapping = {
   "pecas-mecanicas": "Peças Mecânicas",
   "taticos": "Itens Táticos",
   "festas": "Festas",
+  "brindes": "Brindes",
+  "kits": "Kits",
   "brinquedos": "Brinquedos"
 };
 

@@ -13,6 +13,8 @@ import CategoriesIndex from "./pages/CategoriesIndex";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AuthGuard from "./components/AuthGuard";
+import BrindesPage from "./pages/categories/Brindes";
+import KitsPage from "./pages/categories/Kits";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/compras" element={<AuthGuard><Purchases /></AuthGuard>} />
           <Route path="/categorias" element={<CategoriesIndex />} />
           <Route path="/categorias/:slug" element={<Categories />} />
+          <Route path="/categorias/brindes" element={<BrindesPage />} />
+          <Route path="/categorias/kits" element={<KitsPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registrar" element={<Register />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -4,7 +4,9 @@ import {
   Wrench, 
   Package, 
   PartyPopper, 
-  ToyBrick
+  ToyBrick,
+  Gift,  // Added for Brindes
+  PackageOpen  // Added for Kits
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -28,6 +30,16 @@ const categories = [
     name: "Festas",
     icon: PartyPopper,
     href: "/categorias/festas"
+  },
+  {
+    name: "Brindes",  // New category
+    icon: Gift,
+    href: "/categorias/brindes"
+  },
+  {
+    name: "Kits",  // New category
+    icon: PackageOpen,
+    href: "/categorias/kits"
   },
   {
     name: "Brinquedos",

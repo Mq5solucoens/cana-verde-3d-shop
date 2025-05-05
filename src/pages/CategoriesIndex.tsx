@@ -6,7 +6,9 @@ import {
   Wrench, 
   Package, 
   PartyPopper, 
-  ToyBrick
+  ToyBrick,
+  Gift,  // Added for Brindes
+  PackageOpen  // Added for Kits
 } from "lucide-react";
 
 const categories = [
@@ -33,6 +35,18 @@ const categories = [
     icon: PartyPopper,
     slug: "festas",
     description: "Acessórios e decorações para suas celebrações"
+  },
+  {
+    name: "Brindes",  // New category
+    icon: Gift,
+    slug: "brindes",
+    description: "Itens personalizáveis para presentes e eventos corporativos"
+  },
+  {
+    name: "Kits",  // New category
+    icon: PackageOpen,
+    slug: "kits",
+    description: "Conjuntos completos para diversos tipos de projetos"
   },
   {
     name: "Brinquedos",
