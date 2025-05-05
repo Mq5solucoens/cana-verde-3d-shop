@@ -6,7 +6,6 @@ import {
   X,
   Search,
   ShoppingCart,
-  ShoppingBag,
   LogOut,
   User
 } from "lucide-react";
@@ -17,6 +16,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [cartCount, setCartCount] = useState(0);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -37,6 +37,17 @@ const Navbar = () => {
       window.removeEventListener("storage", checkAuth);
     };
   }, []);
+
+  // Simulate loading cart items - this would be replaced with actual cart functionality
+  useEffect(() => {
+    // This would typically come from a cart state or context
+    const savedCartCount = localStorage.getItem("cartItemCount");
+    setCartCount(savedCartCount ? parseInt(savedCartCount) : 0);
+  }, []);
+  
+  const handleCartClick = () => {
+    navigate("/compras");
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
@@ -78,7 +89,6 @@ const Navbar = () => {
             <Link to="/" className="text-foreground hover:text-cana-verde transition-colors">Início</Link>
             <Link to="/produtos" className="text-foreground hover:text-cana-verde transition-colors">Produtos</Link>
             <Link to="/categorias" className="text-foreground hover:text-cana-verde transition-colors">Categorias</Link>
-            <Link to="/compras" className="text-foreground hover:text-cana-verde transition-colors">Compras</Link>
             <Link to="/sobre" className="text-foreground hover:text-cana-verde transition-colors">Sobre</Link>
             <Link to="/contato" className="text-foreground hover:text-cana-verde transition-colors">Contato</Link>
           </div>
@@ -88,15 +98,15 @@ const Navbar = () => {
             <Button variant="ghost" size="icon">
               <Search size={20} />
             </Button>
-            <Link to="/compras">
-              <Button variant="ghost" size="icon">
-                <ShoppingBag size={20} />
-              </Button>
-            </Link>
-            <Button variant="ghost" size="icon" className="relative">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="relative"
+              onClick={handleCartClick}
+            >
               <ShoppingCart size={20} />
               <span className="absolute -top-1 -right-1 bg-cana-verde text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                0
+                {cartCount}
               </span>
             </Button>
             
@@ -139,22 +149,21 @@ const Navbar = () => {
               <Link to="/" className="text-foreground py-2 hover:text-cana-verde">Início</Link>
               <Link to="/produtos" className="text-foreground py-2 hover:text-cana-verde">Produtos</Link>
               <Link to="/categorias" className="text-foreground py-2 hover:text-cana-verde">Categorias</Link>
-              <Link to="/compras" className="text-foreground py-2 hover:text-cana-verde">Compras</Link>
               <Link to="/sobre" className="text-foreground py-2 hover:text-cana-verde">Sobre</Link>
               <Link to="/contato" className="text-foreground py-2 hover:text-cana-verde">Contato</Link>
               <div className="flex space-x-3 pt-2">
                 <Button variant="ghost" size="icon">
                   <Search size={20} />
                 </Button>
-                <Link to="/compras">
-                  <Button variant="ghost" size="icon">
-                    <ShoppingBag size={20} />
-                  </Button>
-                </Link>
-                <Button variant="ghost" size="icon" className="relative">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="relative"
+                  onClick={handleCartClick}
+                >
                   <ShoppingCart size={20} />
                   <span className="absolute -top-1 -right-1 bg-cana-verde text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    0
+                    {cartCount}
                   </span>
                 </Button>
                 
