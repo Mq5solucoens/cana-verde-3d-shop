@@ -17,7 +17,7 @@ const Hero = () => {
               <span className="gradient-text">Modelos 3D</span> para todos os seus projetos
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
-              Encontre modelos 3D de alta qualidade para decoração, peças mecânicas, festas, brinquedos e muito mais. Pronto para uso em seus aplicativos e projetos.
+              Encontre objetos 3D de alta qualidade para decoração, peças mecânicas, festas, brindes, brinquedos e muito mais.
             </p>
           </div>
           
