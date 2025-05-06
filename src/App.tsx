@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 import AuthGuard from "./components/AuthGuard";
 import BrindesPage from "./pages/categories/Brindes";
 import KitsPage from "./pages/categories/Kits";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/categorias/kits" element={<KitsPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registrar" element={<Register />} />
+          <Route path="/admin" element={<AuthGuard><Admin /></AuthGuard>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
