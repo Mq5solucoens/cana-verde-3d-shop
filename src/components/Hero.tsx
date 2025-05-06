@@ -14,7 +14,7 @@ const Hero = () => {
           {/* Text Content */}
           <div className="lg:w-1/2 mb-10 lg:mb-0 text-center lg:text-left">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              <span className="gradient-text">Modelos 3D</span> para todos os seus projetos
+              <span className="gradient-text">Impressões em 3D</span> para todos os seus projetos
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
               Encontre objetos 3D de alta qualidade para decoração, peças mecânicas, festas, brindes, brinquedos e muito mais.
