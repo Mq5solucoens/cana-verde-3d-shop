@@ -16,32 +16,36 @@ import AuthGuard from "./components/AuthGuard";
 import BrindesPage from "./pages/categories/Brindes";
 import KitsPage from "./pages/categories/Kits";
 import Admin from "./pages/Admin";
+import { useState } from "react";
 
-const queryClient = new QueryClient();
+function App() {
+  // Use useState to create the QueryClient
+  const [queryClient] = useState(() => new QueryClient());
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/produtos" element={<Products />} />
-          <Route path="/compras" element={<AuthGuard><Purchases /></AuthGuard>} />
-          <Route path="/categorias" element={<CategoriesIndex />} />
-          <Route path="/categorias/:slug" element={<Categories />} />
-          <Route path="/categorias/brindes" element={<BrindesPage />} />
-          <Route path="/categorias/kits" element={<KitsPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registrar" element={<Register />} />
-          <Route path="/admin" element={<AuthGuard><Admin /></AuthGuard>} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/produtos" element={<Products />} />
+            <Route path="/compras" element={<AuthGuard><Purchases /></AuthGuard>} />
+            <Route path="/categorias" element={<CategoriesIndex />} />
+            <Route path="/categorias/:slug" element={<Categories />} />
+            <Route path="/categorias/brindes" element={<BrindesPage />} />
+            <Route path="/categorias/kits" element={<KitsPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registrar" element={<Register />} />
+            <Route path="/admin" element={<AuthGuard><Admin /></AuthGuard>} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
