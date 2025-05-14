@@ -44,6 +44,7 @@ const ProductList = ({
             <TableHeader>
               <TableRow>
                 <TableHead>Nome</TableHead>
+                <TableHead>Mercadoria</TableHead>
                 <TableHead>Preço</TableHead>
                 <TableHead>Estoque</TableHead>
                 <TableHead className="w-[100px]">Ações</TableHead>
@@ -53,6 +54,7 @@ const ProductList = ({
               {products.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell>{product.merchandise || "Não especificado"}</TableCell>
                   <TableCell>R$ {product.price.toFixed(2)}</TableCell>
                   <TableCell>{product.stock}</TableCell>
                   <TableCell>

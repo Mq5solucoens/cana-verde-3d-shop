@@ -60,6 +60,16 @@ const ProductForm = ({
             />
           </div>
           
+          <div className="space-y-2">
+            <Label htmlFor="product-merchandise">Mercadoria</Label>
+            <Input 
+              id="product-merchandise" 
+              value={editingProduct ? editingProduct.merchandise || "" : newProduct.merchandise || ""} 
+              onChange={(e) => onFieldChange("merchandise", e.target.value)}
+              placeholder="Tipo de mercadoria"
+            />
+          </div>
+          
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="product-price">Preço (R$)</Label>
