@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Plus, Pencil, Trash, Search } from "lucide-react";
 import { Product } from "@/types/admin";
 
 interface ProductListProps {
@@ -22,6 +23,13 @@ const ProductList = ({
   onEditProduct, 
   onDeleteProduct 
 }: ProductListProps) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const filteredProducts = products.filter(product => 
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (product.merchandise && product.merchandise.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
   return (
     <div className="space-y-2 mt-8">
       <div className="flex items-center justify-between">
@@ -36,9 +44,19 @@ const ProductList = ({
         </Button>
       </div>
       
+      <div className="relative mb-4">
+        <Input
+          placeholder="Buscar produtos..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-9"
+        />
+        <Search className="absolute left-2.5 top-2.5 h-5 w-5 text-muted-foreground" />
+      </div>
+      
       {productLoading ? (
         <p>Carregando produtos...</p>
-      ) : products.length > 0 ? (
+      ) : filteredProducts.length > 0 ? (
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -51,7 +69,7 @@ const ProductList = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>{product.merchandise || "Não especificado"}</TableCell>
@@ -99,7 +117,10 @@ const ProductList = ({
         </div>
       ) : (
         <p className="text-muted-foreground text-center py-4">
-          Nenhum produto cadastrado nesta categoria.
+          {searchQuery 
+            ? "Nenhum produto encontrado com este termo de busca."
+            : "Nenhum produto cadastrado nesta categoria."
+          }
         </p>
       )}
     </div>
