@@ -68,9 +68,28 @@ export const useProductActions = (
   };
 
   const handleSaveProduct = async () => {
-    if (!selectedCategoryId) return;
+    if (!selectedCategoryId) {
+      toast({
+        title: "Erro",
+        description: "Categoria não selecionada",
+        variant: "destructive",
+      });
+      return;
+    }
     
     try {
+      // Verificar se o usuário está autenticado
+      const { data: session } = await supabase.auth.getSession();
+      
+      if (!session || !session.session) {
+        toast({
+          title: "Erro de autenticação",
+          description: "Você precisa estar logado para salvar produtos",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       if (editingProduct) {
         // Atualizar produto existente
         const { error } = await supabase
@@ -85,27 +104,43 @@ export const useProductActions = (
           })
           .eq("id", editingProduct.id);
         
-        if (error) throw error;
+        if (error) {
+          console.error("Erro ao atualizar produto:", error);
+          throw error;
+        }
         
         toast({
           title: "Sucesso",
           description: "Produto atualizado com sucesso!",
         });
       } else {
+        // Verificar dados obrigatórios
+        if (!newProduct.name || newProduct.price === undefined) {
+          toast({
+            title: "Erro",
+            description: "Nome e preço são obrigatórios",
+            variant: "destructive",
+          });
+          return;
+        }
+        
         // Criar novo produto
-        const { error } = await supabase
+        const { error, data } = await supabase
           .from("products")
           .insert({
             name: newProduct.name,
-            description: newProduct.description,
+            description: newProduct.description || null,
             price: newProduct.price,
-            stock: newProduct.stock,
-            merchandise: newProduct.merchandise,
-            image_url: newProduct.image_url,
+            stock: newProduct.stock || 0,
+            merchandise: newProduct.merchandise || null,
+            image_url: newProduct.image_url || null,
             category_id: selectedCategoryId,
           });
         
-        if (error) throw error;
+        if (error) {
+          console.error("Erro ao criar produto:", error);
+          throw error;
+        }
         
         toast({
           title: "Sucesso",
@@ -118,11 +153,11 @@ export const useProductActions = (
       if (selectedCategoryId) {
         fetchProductsByCategory(selectedCategoryId);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao salvar produto:", error);
       toast({
         title: "Erro",
-        description: "Não foi possível salvar o produto",
+        description: error.message || "Não foi possível salvar o produto",
         variant: "destructive",
       });
     }
