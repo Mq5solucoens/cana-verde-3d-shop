@@ -16,6 +16,7 @@ import AuthGuard from "./components/AuthGuard";
 import BrindesPage from "./pages/categories/Brindes";
 import KitsPage from "./pages/categories/Kits";
 import Admin from "./pages/Admin";
+import NewProduct from "./pages/NewProduct";
 import { useState } from "react";
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/registrar" element={<Register />} />
             <Route path="/admin" element={<AuthGuard><Admin /></AuthGuard>} />
+            <Route path="/admin/novo-produto" element={<AuthGuard><NewProduct /></AuthGuard>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

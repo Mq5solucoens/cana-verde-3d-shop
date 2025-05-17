@@ -1,11 +1,10 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Plus, Pencil, Trash, Search } from "lucide-react";
+import { Edit, Plus, Trash } from "lucide-react";
 import { Product } from "@/types/admin";
 
 interface ProductListProps {
@@ -16,114 +15,108 @@ interface ProductListProps {
   onDeleteProduct: (productId: number) => void;
 }
 
-const ProductList = ({ 
-  products, 
-  productLoading, 
-  onAddProduct, 
-  onEditProduct, 
-  onDeleteProduct 
+const ProductList = ({
+  products,
+  productLoading,
+  onAddProduct,
+  onEditProduct,
+  onDeleteProduct
 }: ProductListProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
   
-  const filteredProducts = products.filter(product => 
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (product.merchandise && product.merchandise.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(price);
+  };
 
+  const handleAddClick = () => {
+    // Opção 1: Usar o modal/sheet existente
+    onAddProduct();
+    
+    // Opção 2: Redirecionar para página dedicada
+    // navigate("/admin/novo-produto");
+  };
+
+  const handleAddNewProductPage = () => {
+    // Redirecionar para a página dedicada
+    navigate("/admin/novo-produto");
+  };
+  
+  const handleDelete = (productId: number) => {
+    if (confirmDelete === productId) {
+      onDeleteProduct(productId);
+      setConfirmDelete(null);
+    } else {
+      setConfirmDelete(productId);
+    }
+  };
+  
   return (
-    <div className="space-y-2 mt-8">
-      <div className="flex items-center justify-between">
-        <Label>Produtos</Label>
-        <Button 
-          size="sm" 
-          variant="outline" 
-          onClick={onAddProduct}
-          className="flex items-center gap-1"
-        >
-          <Plus size={16} /> Novo Produto
-        </Button>
-      </div>
-      
-      <div className="relative mb-4">
-        <Input
-          placeholder="Buscar produtos..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9"
-        />
-        <Search className="absolute left-2.5 top-2.5 h-5 w-5 text-muted-foreground" />
-      </div>
-      
-      {productLoading ? (
-        <p>Carregando produtos...</p>
-      ) : filteredProducts.length > 0 ? (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Mercadoria</TableHead>
-                <TableHead>Preço</TableHead>
-                <TableHead>Estoque</TableHead>
-                <TableHead className="w-[100px]">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredProducts.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell>{product.merchandise || "Não especificado"}</TableCell>
-                  <TableCell>R$ {product.price.toFixed(2)}</TableCell>
-                  <TableCell>{product.stock}</TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2">
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={() => onEditProduct(product)}
-                      >
-                        <Pencil size={16} />
-                      </Button>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <Trash size={16} />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Confirmar exclusão</DialogTitle>
-                            <DialogDescription>
-                              Tem certeza que deseja excluir o produto "{product.name}"?
-                              Esta ação não pode ser desfeita.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <DialogFooter>
-                            <Button 
-                              variant="destructive" 
-                              onClick={() => onDeleteProduct(product.id)}
-                            >
-                              Excluir
-                            </Button>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle>Produtos</CardTitle>
+        <div className="space-x-2">
+          <Button onClick={handleAddNewProductPage} variant="outline">
+            <Plus size={16} className="mr-1" />
+            Nova Página
+          </Button>
+          <Button onClick={handleAddClick}>
+            <Plus size={16} className="mr-1" />
+            Novo Produto
+          </Button>
         </div>
-      ) : (
-        <p className="text-muted-foreground text-center py-4">
-          {searchQuery 
-            ? "Nenhum produto encontrado com este termo de busca."
-            : "Nenhum produto cadastrado nesta categoria."
-          }
-        </p>
-      )}
-    </div>
+      </CardHeader>
+      <CardContent>
+        {productLoading ? (
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+          </div>
+        ) : products.length > 0 ? (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Preço</TableHead>
+                  <TableHead>Estoque</TableHead>
+                  <TableHead>Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {products.map(product => (
+                  <TableRow key={product.id}>
+                    <TableCell className="font-medium">{product.name}</TableCell>
+                    <TableCell>{formatPrice(product.price)}</TableCell>
+                    <TableCell>{product.stock}</TableCell>
+                    <TableCell className="space-x-2">
+                      <Button size="sm" variant="ghost" onClick={() => onEditProduct(product)}>
+                        <Edit size={16} />
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="text-destructive hover:text-destructive"
+                        onClick={() => handleDelete(product.id)}
+                      >
+                        <Trash size={16} />
+                        {confirmDelete === product.id && " Confirmar"}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            Nenhum produto encontrado nesta categoria.
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
