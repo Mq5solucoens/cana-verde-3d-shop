@@ -51,19 +51,6 @@ const ProductFormPage = ({ categoryId }: { categoryId: number }) => {
     setIsLoading(true);
 
     try {
-      // Verificar se o usuário está autenticado
-      const { data: session } = await supabase.auth.getSession();
-      
-      if (!session || !session.session) {
-        toast({
-          title: "Erro de autenticação",
-          description: "Você precisa estar logado para salvar produtos",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-      
       const { error } = await supabase
         .from("products")
         .insert({

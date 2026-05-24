@@ -4,8 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ImageUpload from "@/components/ui/image-upload";
-import { Product } from "@/types/admin";
+import { Product, Category } from "@/types/admin";
 
 interface ProductFormProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ interface ProductFormProps {
   onFieldChange: (field: keyof Product, value: any) => void;
   onImageUpload: (url: string) => void;
   onSave: () => void;
+  categories?: Category[];
 }
 
 const ProductForm = ({
@@ -24,20 +26,21 @@ const ProductForm = ({
   newProduct,
   onFieldChange,
   onImageUpload,
-  onSave
+  onSave,
+  categories = []
 }: ProductFormProps) => {
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-md">
+      <SheetContent className="sm:max-w-md overflow-y-auto">
         <SheetHeader>
           <SheetTitle>{editingProduct ? "Editar Produto" : "Novo Produto"}</SheetTitle>
           <SheetDescription>
-            {editingProduct 
-              ? "Atualize as informações do produto abaixo." 
+            {editingProduct
+              ? "Atualize as informações do produto abaixo."
               : "Preencha as informações do produto abaixo."}
           </SheetDescription>
         </SheetHeader>
-        
+
         <div className="mt-6 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="product-name">Nome do Produto</Label>
@@ -49,6 +52,25 @@ const ProductForm = ({
             />
           </div>
           
+          {categories.length > 0 && (
+            <div className="space-y-2">
+              <Label>Categoria</Label>
+              <Select
+                value={String(editingProduct ? editingProduct.category_id : newProduct.category_id ?? "")}
+                onValueChange={(val) => onFieldChange("category_id", parseInt(val))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione uma categoria" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.id} value={String(cat.id)}>{cat.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label htmlFor="product-description">Descrição</Label>
             <Textarea 
