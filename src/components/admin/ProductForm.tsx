@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ImageUpload from "@/components/ui/image-upload";
 import { Product, Category } from "@/types/admin";
+import { supabaseAdmin } from "@/integrations/supabase/adminClient";
 
 interface ProductFormProps {
   isOpen: boolean;
@@ -142,6 +143,7 @@ const ProductForm = ({
               onUploadComplete={onImageUpload}
               bucketName="BALDENEW"
               folderPath="products"
+              client={supabaseAdmin}
             />
           </div>
         </div>

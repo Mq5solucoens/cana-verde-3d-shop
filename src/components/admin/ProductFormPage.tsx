@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/ui/image-upload";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { supabaseAdmin } from "@/integrations/supabase/adminClient";
 import { useNavigate } from "react-router-dom";
 
 const ProductFormPage = ({ categoryId }: { categoryId: number }) => {
@@ -172,6 +173,7 @@ const ProductFormPage = ({ categoryId }: { categoryId: number }) => {
             onUploadComplete={handleImageUpload}
             bucketName="BALDENEW"
             folderPath="products"
+            client={supabaseAdmin}
           />
         </div>
       </CardContent>

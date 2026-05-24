@@ -4,17 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 interface ImageUploadProps {
   onUploadComplete: (url: string) => void;
   bucketName: string;
   folderPath?: string;
   className?: string;
+  client?: SupabaseClient;
 }
 
-const ImageUpload = ({ onUploadComplete, bucketName, folderPath = "", className }: ImageUploadProps) => {
+const ImageUpload = ({ onUploadComplete, bucketName, folderPath = "", className, client }: ImageUploadProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
+  const storageClient = client ?? supabase;
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -50,7 +53,7 @@ const ImageUpload = ({ onUploadComplete, bucketName, folderPath = "", className 
       const filePath = folderPath ? `${folderPath}/${fileName}` : fileName;
       
       // Upload the file
-      const { data, error } = await supabase.storage
+      const { data, error } = await storageClient.storage
         .from(bucketName)
         .upload(filePath, file, {
           cacheControl: "3600",
@@ -62,7 +65,7 @@ const ImageUpload = ({ onUploadComplete, bucketName, folderPath = "", className 
       }
       
       // Get the public URL
-      const { data: publicUrlData } = supabase.storage
+      const { data: publicUrlData } = storageClient.storage
         .from(bucketName)
         .getPublicUrl(data.path);
       
