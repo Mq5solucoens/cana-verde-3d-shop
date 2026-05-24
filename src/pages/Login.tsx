@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Lock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Email inválido" }),
@@ -40,23 +41,25 @@ const Login = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
-      console.log("Login attempt:", values);
-      // Simulate authentication success
-      setTimeout(() => {
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("userEmail", values.email);
-        toast({
-          title: "Login realizado com sucesso",
-          description: "Bem-vindo de volta!",
-        });
-        navigate("/");
-      }, 1000);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao fazer login",
-        description: "Email ou senha incorretos.",
+      const { error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
       });
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro ao fazer login",
+          description: "Email ou senha incorretos.",
+        });
+        return;
+      }
+
+      toast({
+        title: "Login realizado com sucesso",
+        description: "Bem-vindo de volta!",
+      });
+      navigate("/");
     } finally {
       setIsLoading(false);
     }

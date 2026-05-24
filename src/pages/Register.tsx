@@ -17,6 +17,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Lock, User } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z
   .object({
@@ -56,25 +57,26 @@ const Register = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
-      console.log("Register attempt:", values);
-      // Simulate successful registration
-      setTimeout(() => {
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("userEmail", values.email);
-        localStorage.setItem("userName", values.name);
-        
-        toast({
-          title: "Conta criada com sucesso",
-          description: "Bem-vindo à MQ53D!",
-        });
-        navigate("/");
-      }, 1000);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao criar conta",
-        description: "Ocorreu um erro ao tentar criar sua conta.",
+      const { error } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: { data: { name: values.name } }
       });
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Erro ao criar conta",
+          description: error.message,
+        });
+        return;
+      }
+
+      toast({
+        title: "Conta criada com sucesso",
+        description: "Bem-vindo à MQ53D!",
+      });
+      navigate("/");
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +124,7 @@ const Register = () => {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="email"
@@ -143,7 +145,7 @@ const Register = () => {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="password"
@@ -165,7 +167,7 @@ const Register = () => {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -187,7 +189,7 @@ const Register = () => {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="acceptTerms"

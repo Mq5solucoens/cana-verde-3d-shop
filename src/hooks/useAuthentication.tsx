@@ -2,11 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from './use-toast';
-
-interface User {
-  email: string;
-  name?: string;
-}
+import { supabase } from '@/integrations/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
 export const useAuthentication = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -16,87 +13,64 @@ export const useAuthentication = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const checkAuthStatus = () => {
-      const auth = localStorage.getItem('isAuthenticated');
-      const email = localStorage.getItem('userEmail');
-      const name = localStorage.getItem('userName');
-      
-      setIsAuthenticated(auth === 'true');
-      
-      if (auth === 'true' && email) {
-        setUser({ email, name: name || undefined });
-      } else {
-        setUser(null);
-      }
-      
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session);
+      setUser(session?.user ?? null);
       setIsLoading(false);
-    };
-    
-    checkAuthStatus();
-    
-    // Listen for storage changes to update auth state
-    window.addEventListener('storage', checkAuthStatus);
-    return () => {
-      window.removeEventListener('storage', checkAuthStatus);
-    };
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = (email: string, password: string): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // This is a mock login function - in a real app, you'd validate credentials with a backend
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('userEmail', email);
-        
-        // Update state
-        setIsAuthenticated(true);
-        setUser({ email });
-        
-        toast({
-          title: "Login realizado com sucesso",
-          description: "Bem-vindo de volta!",
-        });
-        
-        resolve(true);
-      }, 1000);
+  const login = async (email: string, password: string): Promise<boolean> => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao fazer login",
+        description: "Email ou senha incorretos.",
+      });
+      return false;
+    }
+    toast({
+      title: "Login realizado com sucesso",
+      description: "Bem-vindo de volta!",
     });
+    return true;
   };
 
-  const register = (name: string, email: string, password: string): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // This is a mock register function
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userName', name);
-        
-        // Update state
-        setIsAuthenticated(true);
-        setUser({ email, name });
-        
-        toast({
-          title: "Conta criada com sucesso",
-          description: "Bem-vindo à MQ53D!",
-        });
-        
-        resolve(true);
-      }, 1000);
+  const register = async (name: string, email: string, password: string): Promise<boolean> => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { name } }
     });
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao criar conta",
+        description: error.message,
+      });
+      return false;
+    }
+    toast({
+      title: "Conta criada com sucesso",
+      description: "Bem-vindo à MQ53D!",
+    });
+    return true;
   };
 
-  const logout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userName');
-    
-    setIsAuthenticated(false);
-    setUser(null);
-    
+  const logout = async () => {
+    await supabase.auth.signOut();
     toast({
       title: "Sessão encerrada",
       description: "Você saiu da sua conta com sucesso."
     });
-    
     navigate('/');
   };
 
@@ -110,7 +84,6 @@ export const useAuthentication = () => {
       navigate('/login');
       return;
     }
-    
     callback();
   };
 

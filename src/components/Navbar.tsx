@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { 
+import {
   Menu,
   X,
   Search,
@@ -11,49 +11,39 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [authUser, setAuthUser] = useState<SupabaseUser | null>(null);
   const [cartCount, setCartCount] = useState(0);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = () => {
-      const auth = localStorage.getItem("isAuthenticated");
-      const email = localStorage.getItem("userEmail");
-      
-      setIsLoggedIn(auth === "true");
-      setUserEmail(email || "");
-    };
-    
-    checkAuth();
-    // Check auth status when component mounts and when localStorage changes
-    window.addEventListener("storage", checkAuth);
-    
-    return () => {
-      window.removeEventListener("storage", checkAuth);
-    };
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setAuthUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  // Simulate loading cart items - this would be replaced with actual cart functionality
   useEffect(() => {
-    // This would typically come from a cart state or context
     const savedCartCount = localStorage.getItem("cartItemCount");
     setCartCount(savedCartCount ? parseInt(savedCartCount) : 0);
   }, []);
-  
+
   const handleCartClick = () => {
     navigate("/compras");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userName");
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast({
       title: "Sessão encerrada",
       description: "Você saiu da sua conta com sucesso."
@@ -61,16 +51,15 @@ const Navbar = () => {
     navigate("/");
   };
 
-  // Extract username/email for display
   const displayName = () => {
-    const name = localStorage.getItem("userName");
+    if (!authUser) return "Usuário";
+    const name = authUser.user_metadata?.name;
     if (name) return name;
-    if (userEmail) {
-      const parts = userEmail.split('@');
-      return parts[0];
-    }
-    return "Usuário";
+    const email = authUser.email || "";
+    return email.split('@')[0];
   };
+
+  const isLoggedIn = !!authUser;
 
   return (
     <nav className="bg-secondary/80 backdrop-blur-md sticky top-0 z-50">
@@ -83,7 +72,7 @@ const Navbar = () => {
             </div>
             <h1 className="ml-2 font-bold text-xl md:text-2xl text-foreground">MQ5<span className="text-cana-verde">3D</span></h1>
           </Link>
-          
+
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-foreground hover:text-cana-verde transition-colors">Início</Link>
@@ -92,15 +81,15 @@ const Navbar = () => {
             <Link to="/sobre" className="text-foreground hover:text-cana-verde transition-colors">Sobre</Link>
             <Link to="/contato" className="text-foreground hover:text-cana-verde transition-colors">Contato</Link>
           </div>
-          
+
           {/* Action Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <Button variant="ghost" size="icon">
               <Search size={20} />
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="relative"
               onClick={handleCartClick}
             >
@@ -109,7 +98,7 @@ const Navbar = () => {
                 {cartCount}
               </span>
             </Button>
-            
+
             {isLoggedIn ? (
               <div className="flex items-center space-x-2">
                 <Button variant="outline" className="flex items-center gap-2">
@@ -128,11 +117,11 @@ const Navbar = () => {
               </Link>
             )}
           </div>
-          
+
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-foreground"
@@ -141,7 +130,7 @@ const Navbar = () => {
             </Button>
           </div>
         </div>
-        
+
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden pt-4 pb-3 border-t border-border mt-3">
@@ -155,9 +144,9 @@ const Navbar = () => {
                 <Button variant="ghost" size="icon">
                   <Search size={20} />
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="relative"
                   onClick={handleCartClick}
                 >
@@ -166,7 +155,7 @@ const Navbar = () => {
                     {cartCount}
                   </span>
                 </Button>
-                
+
                 {isLoggedIn ? (
                   <div className="flex items-center space-x-2">
                     <Button variant="outline" className="flex items-center gap-2">
