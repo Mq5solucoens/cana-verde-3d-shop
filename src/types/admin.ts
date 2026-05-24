@@ -8,6 +8,8 @@ export interface Category {
   icon: string;
 }
 
+export type ProductStatus = 'ativo' | 'inativo' | 'rascunho';
+
 export interface Product {
   id: number;
   name: string;
@@ -17,4 +19,6 @@ export interface Product {
   stock: number;
   category_id: number;
   merchandise?: string | null;
+  status: ProductStatus;
+  category_name?: string;
 }

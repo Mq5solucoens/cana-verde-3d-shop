@@ -30,6 +30,8 @@ const ProductForm = ({
   onSave,
   categories = []
 }: ProductFormProps) => {
+  const current = editingProduct ?? newProduct;
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-md overflow-y-auto">
@@ -44,20 +46,20 @@ const ProductForm = ({
 
         <div className="mt-6 space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="product-name">Nome do Produto</Label>
-            <Input 
-              id="product-name" 
-              value={editingProduct ? editingProduct.name : newProduct.name || ""} 
+            <Label htmlFor="product-name">Nome do Produto *</Label>
+            <Input
+              id="product-name"
+              value={current.name || ""}
               onChange={(e) => onFieldChange("name", e.target.value)}
               placeholder="Nome do produto"
             />
           </div>
-          
+
           {categories.length > 0 && (
             <div className="space-y-2">
-              <Label>Categoria</Label>
+              <Label>Categoria *</Label>
               <Select
-                value={String(editingProduct ? editingProduct.category_id : newProduct.category_id ?? "")}
+                value={String(current.category_id ?? "")}
                 onValueChange={(val) => onFieldChange("category_id", parseInt(val))}
               >
                 <SelectTrigger>
@@ -74,71 +76,86 @@ const ProductForm = ({
 
           <div className="space-y-2">
             <Label htmlFor="product-description">Descrição</Label>
-            <Textarea 
-              id="product-description" 
-              value={editingProduct ? editingProduct.description || "" : newProduct.description || ""} 
+            <Textarea
+              id="product-description"
+              value={current.description || ""}
               onChange={(e) => onFieldChange("description", e.target.value)}
               placeholder="Descrição do produto"
-              rows={4}
+              rows={3}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="product-merchandise">Mercadoria</Label>
-            <Input 
-              id="product-merchandise" 
-              value={editingProduct ? editingProduct.merchandise || "" : newProduct.merchandise || ""} 
+            <Input
+              id="product-merchandise"
+              value={current.merchandise || ""}
               onChange={(e) => onFieldChange("merchandise", e.target.value)}
               placeholder="Tipo de mercadoria"
             />
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="product-price">Preço (R$)</Label>
-              <Input 
-                id="product-price" 
+              <Label htmlFor="product-price">Preço (R$) *</Label>
+              <Input
+                id="product-price"
                 type="number"
                 step="0.01"
                 min="0"
-                value={editingProduct ? editingProduct.price : newProduct.price || 0} 
+                value={current.price ?? 0}
                 onChange={(e) => onFieldChange("price", parseFloat(e.target.value))}
                 placeholder="0.00"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="product-stock">Estoque</Label>
-              <Input 
-                id="product-stock" 
+              <Input
+                id="product-stock"
                 type="number"
                 min="0"
-                value={editingProduct ? editingProduct.stock : newProduct.stock || 0} 
+                value={current.stock ?? 0}
                 onChange={(e) => onFieldChange("stock", parseInt(e.target.value))}
                 placeholder="0"
               />
             </div>
           </div>
-          
+
+          <div className="space-y-2">
+            <Label>Status</Label>
+            <Select
+              value={current.status || "ativo"}
+              onValueChange={(val) => onFieldChange("status", val)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione o status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ativo">Ativo — visível no catálogo</SelectItem>
+                <SelectItem value="inativo">Inativo — oculto do catálogo</SelectItem>
+                <SelectItem value="rascunho">Rascunho — em preparação</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="space-y-2">
             <Label>Imagem do Produto</Label>
-            {(editingProduct?.image_url || newProduct.image_url) && (
+            {current.image_url && (
               <div className="mt-2 mb-3">
                 <img
-                  src={editingProduct ? editingProduct.image_url || "" : newProduct.image_url || ""}
+                  src={current.image_url}
                   alt="Preview do produto"
                   className="w-full max-h-48 object-cover rounded-md"
                 />
               </div>
             )}
-            <div className="space-y-2">
-              <Input
-                placeholder="Cole a URL da imagem aqui..."
-                value={editingProduct ? editingProduct.image_url || "" : newProduct.image_url || ""}
-                onChange={(e) => onImageUpload(e.target.value)}
-              />
-              <p className="text-xs text-muted-foreground">ou faça upload:</p>
-            </div>
+            <Input
+              placeholder="Cole a URL da imagem aqui..."
+              value={current.image_url || ""}
+              onChange={(e) => onImageUpload(e.target.value)}
+            />
+            <p className="text-xs text-muted-foreground">ou faça upload:</p>
             <ImageUpload
               onUploadComplete={onImageUpload}
               bucketName="BALDENEW"
@@ -147,9 +164,12 @@ const ProductForm = ({
             />
           </div>
         </div>
-        
+
         <SheetFooter className="mt-6">
-          <Button onClick={onSave}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
+          <Button onClick={onSave} className="bg-cana-verde hover:bg-cana-verde-600">
             {editingProduct ? "Atualizar Produto" : "Adicionar Produto"}
           </Button>
         </SheetFooter>
