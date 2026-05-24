@@ -140,7 +140,7 @@ const ProductForm = ({
             </div>
             <ImageUpload
               onUploadComplete={onImageUpload}
-              bucketName="loja mq53d"
+              bucketName="BALDENEW"
               folderPath="products"
             />
           </div>

@@ -170,7 +170,7 @@ const ProductFormPage = ({ categoryId }: { categoryId: number }) => {
           <p className="text-xs text-muted-foreground">ou faça upload:</p>
           <ImageUpload
             onUploadComplete={handleImageUpload}
-            bucketName="loja mq53d"
+            bucketName="BALDENEW"
             folderPath="products"
           />
         </div>
