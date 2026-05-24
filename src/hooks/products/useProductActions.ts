@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Product } from "@/types/admin";
 
 export const useProductActions = (
-  fetchProductsByCategory: (categoryId: number) => Promise<void>,
+  onRefresh: (categoryId?: number) => Promise<void>,
   selectedCategoryId?: number
 ) => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -68,7 +68,9 @@ export const useProductActions = (
   };
 
   const handleSaveProduct = async () => {
-    if (!selectedCategoryId) {
+    const categoryId = selectedCategoryId ?? (editingProduct?.category_id);
+
+    if (!editingProduct && !categoryId) {
       toast({
         title: "Erro",
         description: "Categoria não selecionada",
@@ -134,7 +136,7 @@ export const useProductActions = (
             stock: newProduct.stock || 0,
             merchandise: newProduct.merchandise || null,
             image_url: newProduct.image_url || null,
-            category_id: selectedCategoryId,
+            category_id: categoryId!,
           });
         
         if (error) {
@@ -150,9 +152,7 @@ export const useProductActions = (
       
       // Fechar o sheet e atualizar a lista
       setIsProductSheetOpen(false);
-      if (selectedCategoryId) {
-        fetchProductsByCategory(selectedCategoryId);
-      }
+      await onRefresh(selectedCategoryId);
     } catch (error: any) {
       console.error("Erro ao salvar produto:", error);
       toast({

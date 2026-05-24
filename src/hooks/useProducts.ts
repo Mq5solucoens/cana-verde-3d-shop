@@ -12,6 +12,10 @@ export const useProducts = (selectedCategory: Category | null) => {
     handleDeleteProduct
   } = useProductOperations();
 
+  const refresh = async (categoryId?: number) => {
+    if (categoryId) await fetchProductsByCategory(categoryId);
+  };
+
   const {
     editingProduct,
     newProduct,
@@ -22,7 +26,7 @@ export const useProducts = (selectedCategory: Category | null) => {
     handleAddProduct,
     handleEditProduct,
     handleSaveProduct
-  } = useProductActions(fetchProductsByCategory, selectedCategory?.id);
+  } = useProductActions(refresh, selectedCategory?.id);
 
   useEffect(() => {
     if (selectedCategory) {

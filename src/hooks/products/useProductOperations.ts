@@ -19,13 +19,36 @@ export const useProductOperations = () => {
         .order("name");
 
       if (error) throw error;
-      
+
       setProducts(data || []);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
       toast({
         title: "Erro",
         description: "Não foi possível carregar os produtos desta categoria",
+        variant: "destructive",
+      });
+    } finally {
+      setProductLoading(false);
+    }
+  };
+
+  const fetchAllProducts = async () => {
+    setProductLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("name");
+
+      if (error) throw error;
+
+      setProducts(data || []);
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível carregar os produtos",
         variant: "destructive",
       });
     } finally {
@@ -65,6 +88,7 @@ export const useProductOperations = () => {
     products,
     productLoading,
     fetchProductsByCategory,
+    fetchAllProducts,
     handleDeleteProduct
   };
 };

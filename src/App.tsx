@@ -39,8 +39,8 @@ function App() {
             <Route path="/categorias/kits" element={<KitsPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registrar" element={<Register />} />
-            <Route path="/admin" element={<AuthGuard><Admin /></AuthGuard>} />
-            <Route path="/admin/novo-produto" element={<AuthGuard><NewProduct /></AuthGuard>} />
+            <Route path="/admin" element={<AuthGuard adminOnly><Admin /></AuthGuard>} />
+            <Route path="/admin/novo-produto" element={<AuthGuard adminOnly><NewProduct /></AuthGuard>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
