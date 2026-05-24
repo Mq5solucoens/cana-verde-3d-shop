@@ -76,7 +76,7 @@ export const useAuthentication = () => {
         
         toast({
           title: "Conta criada com sucesso",
-          description: "Bem-vindo à Cana3D!",
+          description: "Bem-vindo à MQ53D!",
         });
         
         resolve(true);

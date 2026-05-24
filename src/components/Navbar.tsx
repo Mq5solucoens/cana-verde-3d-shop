@@ -81,7 +81,7 @@ const Navbar = () => {
             <div className="h-10 w-10 bg-cana-verde rounded-md flex items-center justify-center">
               <div className="h-6 w-6 bg-white rounded-sm transform rotate-45"></div>
             </div>
-            <h1 className="ml-2 font-bold text-xl md:text-2xl text-foreground">Cana<span className="text-cana-verde">3D</span></h1>
+            <h1 className="ml-2 font-bold text-xl md:text-2xl text-foreground">MQ5<span className="text-cana-verde">3D</span></h1>
           </Link>
           
           {/* Desktop Navigation */}

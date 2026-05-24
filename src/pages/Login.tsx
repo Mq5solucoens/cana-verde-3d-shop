@@ -71,7 +71,7 @@ const Login = () => {
               <div className="h-7 w-7 bg-white rounded-sm transform rotate-45"></div>
             </div>
             <h1 className="ml-2 font-bold text-2xl md:text-3xl text-foreground">
-              Cana<span className="text-cana-verde">3D</span>
+              MQ5<span className="text-cana-verde">3D</span>
             </h1>
           </Link>
           <h2 className="text-2xl font-bold tracking-tight text-foreground">

@@ -15,7 +15,7 @@ const Footer = () => {
               <div className="h-8 w-8 bg-cana-verde rounded-md flex items-center justify-center">
                 <div className="h-4 w-4 bg-white rounded-sm transform rotate-45"></div>
               </div>
-              <h3 className="ml-2 font-bold text-xl text-foreground">Cana<span className="text-cana-verde">3D</span></h3>
+              <h3 className="ml-2 font-bold text-xl text-foreground">MQ5<span className="text-cana-verde">3D</span></h3>
             </div>
             <p className="text-muted-foreground mb-4">
               Plataforma especializada na venda de modelos 3D de alta qualidade para diversos segmentos e aplicações.
@@ -90,7 +90,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-border pt-6 text-center">
           <p className="text-muted-foreground text-sm">
-            &copy; {new Date().getFullYear()} Cana3D. Todos os direitos reservados.
+            &copy; {new Date().getFullYear()} MQ53D. Todos os direitos reservados.
           </p>
         </div>
       </div>
