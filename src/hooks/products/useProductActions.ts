@@ -14,6 +14,7 @@ export const useProductActions = (
     description: "",
     price: 0,
     stock: 0,
+    status: "ativo",
   });
   const [isProductSheetOpen, setIsProductSheetOpen] = useState(false);
   const { toast } = useToast();
@@ -91,6 +92,7 @@ export const useProductActions = (
             stock: editingProduct.stock,
             merchandise: editingProduct.merchandise,
             image_url: editingProduct.image_url,
+            status: editingProduct.status,
           })
           .eq("id", editingProduct.id);
         
@@ -125,6 +127,7 @@ export const useProductActions = (
             merchandise: newProduct.merchandise || null,
             image_url: newProduct.image_url || null,
             category_id: categoryId!,
+            status: newProduct.status || "ativo",
           });
         
         if (error) {
