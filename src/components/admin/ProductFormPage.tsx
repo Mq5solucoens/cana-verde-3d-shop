@@ -162,9 +162,15 @@ const ProductFormPage = ({ categoryId }: { categoryId: number }) => {
               />
             </div>
           )}
-          <ImageUpload 
+          <Input
+            placeholder="Cole a URL da imagem aqui..."
+            value={product.image_url || ""}
+            onChange={(e) => handleFieldChange("image_url", e.target.value)}
+          />
+          <p className="text-xs text-muted-foreground">ou faça upload:</p>
+          <ImageUpload
             onUploadComplete={handleImageUpload}
-            bucketName="product_images"
+            bucketName="loja mq53d"
             folderPath="products"
           />
         </div>

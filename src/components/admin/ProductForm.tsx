@@ -122,17 +122,25 @@ const ProductForm = ({
           <div className="space-y-2">
             <Label>Imagem do Produto</Label>
             {(editingProduct?.image_url || newProduct.image_url) && (
-              <div className="mt-2 mb-4">
-                <img 
-                  src={editingProduct ? editingProduct.image_url || "" : newProduct.image_url || ""} 
-                  alt="Preview do produto" 
+              <div className="mt-2 mb-3">
+                <img
+                  src={editingProduct ? editingProduct.image_url || "" : newProduct.image_url || ""}
+                  alt="Preview do produto"
                   className="w-full max-h-48 object-cover rounded-md"
                 />
               </div>
             )}
-            <ImageUpload 
+            <div className="space-y-2">
+              <Input
+                placeholder="Cole a URL da imagem aqui..."
+                value={editingProduct ? editingProduct.image_url || "" : newProduct.image_url || ""}
+                onChange={(e) => onImageUpload(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">ou faça upload:</p>
+            </div>
+            <ImageUpload
               onUploadComplete={onImageUpload}
-              bucketName="product_images"
+              bucketName="loja mq53d"
               folderPath="products"
             />
           </div>
